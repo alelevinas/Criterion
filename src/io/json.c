@@ -147,6 +147,17 @@ static void print_test(FILE *f, struct criterion_test_stats *ts)
                 char *saveptr = NULL;
                 char *line = strtok_r(dup, "\n", &saveptr);
 
+                // Replace " to ` so we don't break JSON format
+                int c = 0
+                if (strlen(line) > 0) {
+                    while (s[c] != '\0') {
+                      if (s[c] == '"') {
+                         s[c] = '`';
+                      }
+                      c++;
+                    }
+                }
+
                 fprintf(f, JSON_FAILURE_MSG_ENTRY,
                         sf ? basename_compat(asrt->file) : asrt->file,
                         asrt->line,

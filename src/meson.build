@@ -36,6 +36,7 @@ sources = files(
 	'io/event.c',
 	'io/file.c',
 	'io/json.c',
+	'io/custom_json.c',
 	'io/output.c',
 	'io/redirect.c',
 	'io/tap.c',
