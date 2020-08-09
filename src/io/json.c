@@ -147,13 +147,17 @@ static void print_test(FILE *f, struct criterion_test_stats *ts)
                 char *saveptr = NULL;
                 char *line = strtok_r(dup, "\n", &saveptr);
 
-                // Replace " to ` so we don't break JSON format
-                int c = 0
+                // Replace " to \" so we don't break JSON format
+                int c = 0;
+                int quotes = 0;
+                char line_scaped[2000];
                 if (strlen(line) > 0) {
-                    while (s[c] != '\0') {
-                      if (s[c] == '"') {
-                         s[c] = '`';
+                    while (line[c] != '\0') {
+                      if (line[c] == '"') {
+                         line_scaped[c + quotes] = '\\';
+                         quotes++;
                       }
+                      line_scaped[c + quotes] = line[c];
                       c++;
                     }
                 }
@@ -161,7 +165,7 @@ static void print_test(FILE *f, struct criterion_test_stats *ts)
                 fprintf(f, JSON_FAILURE_MSG_ENTRY,
                         sf ? basename_compat(asrt->file) : asrt->file,
                         asrt->line,
-                        line
+                        line_scaped
                         );
 
                 while ((line = strtok_r(NULL, "\n", &saveptr)))
